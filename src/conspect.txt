@@ -1,0 +1,220 @@
+Вынесем дату в отдельный компонент
+Вынесем дату в отдельный компонент 
+подготовим переменные
+
+
+CostItem.js
+import './CostItem.css'
+function CostItem(props){
+
+const month = props.date.toLocaleString("ru-RU",{month: "long"});
+const year = props.date.getFullYear(); 
+const day = props.date.toLocaleString("ru-RU",{day: "2-digit"});
+
+return(
+    <div className="cost_item">
+       
+        <h2>{props.description}</h2>
+        <p>${props.price}</p>
+
+    </div>
+)
+
+}
+export default CostItem;
+
+Создадим файл CostDate.js
+
+function CostDate(props) {
+
+    const month = props.date.toLocaleString("ru-RU",{month: "long"});
+    const year = props.date.getFullYear(); 
+    const day = props.date.toLocaleString("ru-RU",{day: "2-digit"});
+
+    return(
+         <div>
+            <div>{month}</div>
+            <div>{year}</div>
+            <div>{day}</div>
+         </div>
+
+    )
+
+}
+export default CostDate
+
+в CostItem.js 
+import CostDate from "./CostDate";
+    и
+<CostDate date={props.date}/> вместо дивов оображающих дату
+Касательно props - мы передаем свойство date через несколько компонентов App->CostItem->CostDate
+
+Создадим файл CostDate.css и импортируем его в файле CostDate.js
+
+из app.js вырезаем все CostItem и вставляем в компонент Costs.js  
+импортируем в него CostItem  и передаем props параметром
+значит обраще ние к массиву costs будет через props:
+props.costs[0] итд....
+В App.js  импортируем файл Costs.js вместо CostItem.js 
+И теперь можем его использовать:
+
+
+return(
+    <div>
+        ......
+        <Costs costs={costs}/>
+    </div>
+)
+
+
+
+Состояния, события, слушатели событий.
+в файл CostItem.js последним элементом добавим кнопку "изменить описание"
+
+<button> Изменить описание </button>
+Чтобы добавить слушатель события нажатия на эту кнопку добавим onClick
+
+<button onClick={() => {console.log("Click detected")}}> Изменить описание </button>
+Другой вариант - указать в onClick - имя функции, которая была объявлена до "return"
+
+
+const changeDescription = () => {
+    console.log("Clicked")
+}
+И
+<button onClick={changeDescription}>
+Хорошей практикой считается добавление слова Handler к именам
+функций которые обрабатывают события.
+
+Изменение контента по нажатию на кнопку
+Если по нажатию на кнопку менять значение description в обработчике, то 
+ничего не произойдет, т.к. реакт рендерит страницу и все компоненты начиная 
+c App.js 1 раз.
+Нам нужно сообщить реакту, что произошло событие и какой то компонент нужно
+заново парсить.
+Для этого нужны уже знакомые нам state, состояния.
+
+Чтобы Изменение значений было замечено реактом нужно использовать функцию 
+useState
+Функции которые начинаются с use называются хуки.
+Хуки вызываются только внутри функции компонента. Нельзя вызывать снаружи или
+из вложенных функций. 
+CostItem.js
+.....
+import React, { useState} from "react";
+
+const CostItem = (props)=>{
+   const [description,setDescription] =  useState(props.description);
+}
+useState возвращает два значения -  саму переменную и функцию
+
+useState props.description - начальное значение
+Произойдет деструктуризация массива в переменную description   и  функцию 
+для обновления  состояния.
+
+[description,setDescription] - соглашение о названиях
+
+CostItem.js
+import ....
+........
+function CostItem(props){
+
+    const [description,setDescription] =  useState(props.description);
+    const changeDescriptionHandler = () => {
+        setDescription('New Cost');
+        console.log(description);
+
+    };
+
+    return(
+        <CostDate date = {props.date} />
+        .......
+        <h2>{description}</h2>
+        ........
+        <button onClick={changeDescriptionHandler}>Изменить описание </button>
+    )
+
+}
+после вызова  setDescription - устанавливается новое значение description
+и заново вызывается компонент.
+
+Создание нового расхода
+В папке components создадим папку  NewCost,
+ в ней компонент  NewCost.js, также добавим NewCost.css
+
+const NewCost = () => {
+
+    return (<div>
+            
+            </div>)
+}
+export default NewCost;
+цель компонента возвращать форму
+
+Сделаем отдельный компонент для формы CostForm  и CostForm.css
+CostForm.js В форме будем получать название, сумму и дату
+
+import './CostForm.css'
+const CostForm = ()=>{
+    return <form>
+        <label>Название</label>
+        <input type="text">
+
+        <label>Сумма</label>
+        <input type="number">
+
+        <label>Название</label>
+        <input type="date">
+
+        <button type="submit">Добавить расход</button>
+    </form>
+}
+
+import CostForm from ....
+const NewCost = () => {
+
+    return (<div>
+            <CostForm />
+            </div>)
+}
+export default NewCost;
+и теперь
+импортируем NewCost в App.js
+и перед выводом списка расходов <Costs cost={cost}/>
+<Newcost />
+Форма появилась, но она не работает
+Будем использовать в инпутах событие onchange
+
+В файле CostForm.js
+const CostForm = ()=>{
+    const nameChangeHandler = (event) => {
+        console.log("Название изменено")
+        console.log(event.target.value)
+    };
+
+    return <form>
+        <label>Название</label>
+        <input type="text" onchange={nameChangeHandler}/>
+
+        <label>Сумма</label>
+        <input type="number">
+
+        <label>Название</label>
+        <input type="date">
+
+        <button type="submit">Добавить расход</button>
+    </form>
+}
+полученное значение нужно сохранить до момента отправки
+
+В CostForm.js импортируем useState:
+import React, { useState } from "react";
+const CostForm = () =>{
+    const [name,setName] = useState('');
+
+    const nameChangeHandler = (event) => {
+        setName(event.target.value);
+    };
+
+}
+то же самое надо сделать для остальных инпутов

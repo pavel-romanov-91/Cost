@@ -1,0 +1,11 @@
+.date_component{
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    align-items: center;
+    padding: 7px;
+    justify-items: center;
+    background-color: rgb(73, 143, 240);
+    border: 2px solid white;
+    border-radius: 10px;
+    color: antiquewhite;
+}

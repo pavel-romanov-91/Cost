@@ -1,0 +1,102 @@
+npx create-react-app app-name
+cd my-app
+npm start
+
+в папке src оставляем 3 файла App.js, index.js, index.css
+
+App.js
+function App(){
+return(
+	<div>
+		<h1>Начинаем практику</h1>
+	</div>
+)
+}
+export default App;
+
+index.js
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+
+ReactDOM.render(<App />,document.getElementById("root"));
+
+Первым запускается index.js -> выполняются импорты (экспорт-импорт)
+Отображается <App / > в элементе с id "root". содержимое.
+
+jsx - javascript xml
+
+Приложение учета расходов
+сделаем папку components в src
+
+элемент расхода
+CostItem.js
+function CostItem(){
+	return <h2>Элемент расхода</h2>
+}
+export default CostItem;
+
+прописываем импорт CostItem в App.js
+и теперь можем применять компонент в App.js
+<CostItem />
+Компонент обязательно должен начинаться с большой буквы.
+
+return (<div>
+
+	div Date
+	h2 Title
+	div Sum
+
+	</div>
+
+)
+Выглядит страшно, нужно стилизовать
+Рядом с CostItem.js  создадим файл CostItem.css
+import './CostItem.css'
+className для классов 
+
+подставляем свойства вместо фиксированных значений
+const itemData = new Date(2023,09,12)
+h2{date.toISOString()}
+
+передаем данные как props
+
+
+function App(){
+const items = [
+	{date: new Date(2023,9,22,
+	 description: "Очень нужное",
+	 price:9999
+	},
+	{},
+	{}
+];
+
+
+<CostItem date={items[0].date}
+	  description={items[0].description}
+	  price ={items[0].price}
+/>
+}
+
+а в CostItem.js
+function CostItem(props) 
+и
+{props.date.toISOString()}
+Компоненты стали повторно используемыми
+
+Покажем дату в более удобном формате
+месяц
+<div>{props.date.toLocaleString("ru-RU",{month:"long"})}</div>
+<div>{props.date.getFullYear()}</div>
+<div>{props.date.toLocaleString("ru-RU",{day:"2-digit"})}</div>
+
+Стилизация
+
+
+
+
+
+
+
+

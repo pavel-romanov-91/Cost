@@ -1,0 +1,17 @@
+.year{
+    display: grid;
+    width: 25%;
+    margin: auto;
+    margin-top: 15px;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    height: 60px;
+    background-color: gray;
+    border-radius: 10px;
+}
+.year select{
+    height: 30px;
+    font-size: 20px;
+    border-radius: 5px;
+}
